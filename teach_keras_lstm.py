@@ -1,7 +1,8 @@
 from keras.models import Sequential
 from keras.layers import LSTM, BatchNormalization, Dense, Bidirectional
 
-from util import pull_data
+from util import pull_data, projectroot
+from create_plots import Plot
 
 
 def build_keras_rnn(inshape, outshape):
@@ -17,9 +18,10 @@ def build_keras_rnn(inshape, outshape):
     model.compile(optimizer="adam", loss="binary_crossentropy", metrics=["acc"])
     return model
 
+tX, tY, vX, vY = pull_data()
 
-X, Y = pull_data()
-X = X[..., 0].transpose(0, 2, 1)
+net = build_keras_rnn(inshape=tX.shape[1:], outshape=1)
 
-net = build_keras_rnn(inshape=X.shape[1:], outshape=1)
-net.fit(X, Y, epochs=30, validation_split=0.1)
+Plot.architecture(net, projectroot + "LSTM.dot")
+
+net.fit(tX, tY, epochs=30, validation_data=(vX, vY))
