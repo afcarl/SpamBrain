@@ -5,14 +5,11 @@ class Plot:
 
     @staticmethod
     def history(hobject, savepath=None):
+        from matplotlib import pyplot
+
         hh = hobject.history
         tcost, tacc = hh["loss"], hh["acc"]
         vcost, vacc = hh["val_loss"], hh["val_acc"]
-        Plot._common(tcost, tacc, vcost, vacc, savepath=savepath)
-
-    @staticmethod
-    def _common(tcost, tacc, vcost, vacc, savepath=None):
-        from matplotlib import pyplot
 
         epochs = np.arange(1, len(tcost) + 1)
         fig, (axt, axb) = pyplot.subplots(2, 1, figsize=(8, 7))
